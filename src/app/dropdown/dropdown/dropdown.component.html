@@ -1,0 +1,18 @@
+<div class="dropdown">
+    <div class="input">
+        <input #dropDownInput type="text" 
+                (keydown.Tab)="doTab($event)" 
+                (keydown.shift.tab)="doTab($event)" 
+                (keydown.arrowup)="doUp($event)" 
+                (keydown.arrowdown)="doDown($event)" 
+                (keydown.enter)="selectCursor($event)">
+        <div class="toggle-button" (click)="toggle()">
+
+        </div>
+    </div>
+    <div #list class="list" [class.toggled-list]="toggled">
+        <div *ngFor="let item of data; let i = index;" class="list-item" (click)="select(item)" [class.list-item-cursor]="cursorIndex == i">
+            {{ item.id }} - {{ item.name }} - {{i}}
+        </div>
+    </div>
+</div>

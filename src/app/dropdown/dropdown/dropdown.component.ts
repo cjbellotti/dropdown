@@ -8,6 +8,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 export class DropdownComponent implements OnInit {
 
   data : any[] = [];
+  dataList : any[] = [];
 
   value : any = null;
 
@@ -41,6 +42,9 @@ export class DropdownComponent implements OnInit {
     this.toggled = !this.toggled;
     this.cursorIndex = 0;
     this.dropDownInput.nativeElement.focus();
+    if (this.toggled) {
+      this.dataList = [...this.data];
+    }
   }
 
   doTab(e : any) {
@@ -59,17 +63,32 @@ export class DropdownComponent implements OnInit {
   }
 
   doDown(e : any) {
-    if (this.cursorIndex < this.data.length - 1 && this.toggled) {
-      this.cursorIndex++;
-      let scrollOffset = Math.floor(this.cursorIndex / 7);
-      this.list.nativeElement.scrollTop = scrollOffset*150;
+    if (!this.toggled) {
+      this.toggle();
+    } else {
+      if (this.cursorIndex < this.dataList.length - 1 && this.toggled) {
+        this.cursorIndex++;
+        let scrollOffset = Math.floor(this.cursorIndex / 7);
+        this.list.nativeElement.scrollTop = scrollOffset*150;
+      }  
+    }
+  }
+
+  filter(e : any) {
+    if (e.key.search(/(^[\w|\d|\s]$)/g) >= 0 || e.key === 'Backspace') {
+      this.cursorIndex = 0;
+      this.dataList = this.data.filter(x => x.name.toLowerCase().indexOf(this.dropDownInput.nativeElement.value.toLowerCase()) >= 0);
+      if (!this.toggled) {
+        this.toggle();
+      }
     }
   }
 
   selectCursor(e : any) {
     if (this.toggled) {
-      this.value = {...this.data[this.cursorIndex]};
-      this.setInput();  
+      this.value = {...this.dataList[this.cursorIndex]};
+      this.setInput();
+      this.toggle(); 
     }
   }
 
@@ -77,6 +96,7 @@ export class DropdownComponent implements OnInit {
     this.value = item;
     this.setInput();
     this.dropDownInput.nativeElement.focus();
+    this.toggle();
   }
 
   setInput() {

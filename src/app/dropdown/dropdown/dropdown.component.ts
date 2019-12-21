@@ -1,13 +1,21 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, forwardRef, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'dropdown',
   templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.css']
+  styleUrls: ['./dropdown.component.css'],
+  providers : [
+    {
+      provide : NG_VALUE_ACCESSOR,
+      useExisting : forwardRef(() => DropdownComponent),
+      multi : true
+    }
+  ]
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent implements OnInit, ControlValueAccessor {
 
-  data : any[] = [];
+  @Input('options') data : any[] = [];
   dataList : any[] = [];
 
   value : any = null;
@@ -86,22 +94,47 @@ export class DropdownComponent implements OnInit {
 
   selectCursor(e : any) {
     if (this.toggled) {
-      this.value = {...this.dataList[this.cursorIndex]};
-      this.setInput();
+      this.writeValue({...this.dataList[this.cursorIndex]});
+      // this.setInput();
+      this.onChange(this.value);
       this.toggle(); 
     }
   }
 
   select(item : any) {
-    this.value = item;
-    this.setInput();
+    this.writeValue(item);
+    // this.setInput();
+    this.onChange(this.value);
     this.dropDownInput.nativeElement.focus();
     this.toggle();
   }
 
   setInput() {
     if (this.value != null) {
-      this.dropDownInput.nativeElement.value = this.value.id + ' ' + this.value.name;
+      this.dropDownInput.nativeElement.value = this.value.name;
     }
+  }
+
+  // Control Value Accessor
+
+  onChange: any = (_:any) => { }
+  onTouch: any = () => { }
+  isDisabled : boolean;
+
+  writeValue(value: any) : void {
+    this.value = value
+    this.setInput();
+  }
+
+  registerOnChange(fn: any) : void {
+    this.onChange = fn
+  }
+  // upon touching the element, this method gets triggered
+  registerOnTouched(fn: any) : void {
+    this.onTouch = fn
+  }
+
+  setDisabledState(isDisabled : boolean) : void {
+    this.isDisabled = isDisabled;
   }
 }

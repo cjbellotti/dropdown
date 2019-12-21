@@ -13,7 +13,7 @@
     </div>
     <div #list class="list" [class.toggled-list]="toggled">
         <div *ngFor="let item of dataList; let i = index;" class="list-item" (click)="select(item)" [class.list-item-cursor]="cursorIndex == i">
-            {{ item.id }} - {{ item.name }}
+            {{ item.name }}
         </div>
     </div>
 </div>

@@ -1,0 +1,18 @@
+<div class="item" *ngFor="let item of data; let i = index;">
+    <div class="column1">
+        <dropdown [options]="optionList1" [(ngModel)]="item.field1"></dropdown>
+    </div>
+    <div class="column2">
+        <input type="text" class="generic-input" [(ngModel)]="item.field2">
+    </div>
+    <div class="column3">
+        <dropdown [options]="optionList2" [(ngModel)]="item.field3"></dropdown>
+    </div>
+    <div class="column4">
+        <input type="text" class="generic-input" [(ngModel)]="item.field4">
+    </div>
+    <div class="column5">
+        <input type="text" class="generic-input" [(ngModel)]="item.field5" (keydown.Tab)="onTab($event, i)">
+    </div>
+</div>
+<button (click)="show()">Show</button>

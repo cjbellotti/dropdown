@@ -1,11 +1,23 @@
 <div class="container">
+  <!-- {{ dato1?.name }}
   <div>
-    <dropdown></dropdown>
+    <dropdown [(ngModel)]="dato1" [options]="options1"></dropdown>
   </div>
   <div>
     <input type="text">
   </div>
   <div>
     <dropdown></dropdown>
-  </div>
+  </div> -->
+  <input type="text" style="width : 100%">
+  <select name="" id="">
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+  </select>
+  <movimiento-item
+  [optionList1]="options1"
+  [optionList2]="options1"
+  ></movimiento-item>  
+  <button>OK</button>
+  <button>Cancel </button>
 </div>
